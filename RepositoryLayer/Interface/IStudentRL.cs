@@ -9,6 +9,6 @@ namespace RepositoryLayer.Interface
 {
     public interface IStudentRL
     {
-        List<Student> GetStudents(string sortOrder);
+        List<Student> GetStudents(string sortOrder, string searchString);
     }
 }

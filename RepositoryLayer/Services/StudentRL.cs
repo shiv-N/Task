@@ -17,12 +17,18 @@ namespace RepositoryLayer.Services
             this._context = context;
         }
 
-        public List<Student> GetStudents(string sortOrder)
+        public List<Student> GetStudents(string sortOrder, string searchString)
         {
             try
             {
                 var students = from s in _context.Students
                                select s;
+
+                if (!string.IsNullOrEmpty(searchString))
+                {
+                    students = students.Where(s => s.LastName.Contains(searchString)
+                                           || s.EmailAddress.Contains(searchString));
+                }
 
                 switch (sortOrder)
                 {

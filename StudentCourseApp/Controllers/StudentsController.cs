@@ -16,12 +16,13 @@ namespace StudentCourseApp.Controllers
             this._studentRL = studentRL;
         }
 
-        public IActionResult Dashboard(string sortOrder)
+        public IActionResult Dashboard(string sortOrder, string searchString)
         {
             ViewData["NameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewData["CurrentFilter"] = searchString;
 
-            var result = this._studentRL.GetStudents(sortOrder);
+            var result = this._studentRL.GetStudents(sortOrder, searchString);
             return View(result);
         }
     }
