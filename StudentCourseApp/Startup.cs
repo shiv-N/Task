@@ -1,9 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RepositoryLayer.ContextLayer;
+using RepositoryLayer.Interface;
+using RepositoryLayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +28,10 @@ namespace StudentCourseApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddDbContext<StudentAppDbContext>(opts => 
+                    opts.UseSqlServer(Configuration["ConnectionString:StudentAppDB"]));
+
+            services.AddTransient<IStudentRL, StudentRL>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
