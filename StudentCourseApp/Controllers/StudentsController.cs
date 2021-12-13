@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Interface;
+using StudentCourseApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,14 +17,47 @@ namespace StudentCourseApp.Controllers
             this._studentRL = studentRL;
         }
 
-        public IActionResult Dashboard(string sortOrder, string searchString)
+        public async Task<IActionResult> Dashboard(
+            string sortOrder,
+            string currentFilter,
+            string searchString,
+            int? pageNumber)
         {
+            ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
-            ViewData["CurrentFilter"] = searchString;
 
-            var result = this._studentRL.GetStudents(sortOrder, searchString);
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+            int pageSize = 10;
+            var result = await this._studentRL.GetStudents(sortOrder, searchString,pageNumber ?? 1,pageSize);
             return View(result);
+        }
+
+        [HttpPost]
+        [Route("Register")]
+        public IActionResult RegisterStudent(StudentModel student)
+        {
+            if (!ModelState.IsValid && 
+                new Unique(typeof(Email)).IsValid(student.EmailAddress))
+            {
+                return View("Register",student);
+            }
+
+            return RedirectToAction("Dashboard");
+        }
+
+
+        public IActionResult Register(StudentModel student)
+        {
+             return View(student);
         }
     }
 }

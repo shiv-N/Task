@@ -1,4 +1,5 @@
-﻿using RepositoryLayer.ContextLayer;
+﻿using Microsoft.EntityFrameworkCore;
+using RepositoryLayer.ContextLayer;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Interface;
 using System;
@@ -17,7 +18,20 @@ namespace RepositoryLayer.Services
             this._context = context;
         }
 
-        public List<Student> GetStudents(string sortOrder, string searchString)
+        public Student CheckEmail(string email)
+        {
+            try
+            {
+                return _context.Students.FirstOrDefault(x => x.EmailAddress == email);
+            }
+            catch(Exception e)
+            {
+                throw;
+            }
+        }
+
+        public async Task<PaginatedList<Student>> GetStudents(string sortOrder, string searchString,
+                                                            int pageNumber, int pageSize)
         {
             try
             {
@@ -45,7 +59,9 @@ namespace RepositoryLayer.Services
                         students = students.OrderBy(s => s.LastName);
                         break;
                 }
-                return students.ToList();
+
+
+                return await PaginatedList<Student>.CreateAsync(students.AsNoTracking(),pageNumber,pageSize);
             }
             catch(Exception e)
             {
