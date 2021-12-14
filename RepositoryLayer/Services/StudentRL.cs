@@ -68,5 +68,28 @@ namespace RepositoryLayer.Services
                 throw;
             }
         }
+
+        public bool Register(Student model)
+        {
+            try
+            {
+                model.CreatedAt = DateTime.Now;
+                _context.Students.Add(model);
+                int result = _context.SaveChanges();
+
+                if (result > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch(Exception e)
+            {
+                throw;
+            }
+        }
     }
 }

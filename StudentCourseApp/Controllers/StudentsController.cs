@@ -44,21 +44,37 @@ namespace StudentCourseApp.Controllers
 
         [HttpPost]
         [Route("Register")]
-        public IActionResult Register(StudentModel student)
+        public IActionResult Register(StudentModel model)
         {
             if (!ModelState.IsValid)
             {
-                return View("RegisterStudent", student);
+                return View("RegisterStudent", model);
             }
-            Student email = _studentRL.CheckEmail(student.EmailAddress);
+            Student email = _studentRL.CheckEmail(model.EmailAddress);
                 
             if (email != null)
             {
                 ModelState.AddModelError("EmailAddress", "Mail already exists");
-                return View("RegisterStudent", student);
+                return View("RegisterStudent", model);
             }
 
-            return RedirectToAction("Dashboard");
+            bool result = _studentRL.Register(
+                            new Student
+                            {
+                                FirstName = model.FirstName,
+                                LastName = model.LastName,
+                                EmailAddress = model.EmailAddress,
+                                EnrollDate = model.EnrollmentDate
+                            });
+
+            if (result)
+            {
+                return RedirectToAction("Dashboard");
+            }
+            else
+            {
+                return View("RegisterStudent", model);
+            }
         }
 
 
