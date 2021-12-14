@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RepositoryLayer.Entity;
 using RepositoryLayer.Interface;
 using StudentCourseApp.Models;
 using System;
@@ -43,19 +44,25 @@ namespace StudentCourseApp.Controllers
 
         [HttpPost]
         [Route("Register")]
-        public IActionResult RegisterStudent(StudentModel student)
+        public IActionResult Register(StudentModel student)
         {
-            if (!ModelState.IsValid && 
-                new Unique(typeof(Email)).IsValid(student.EmailAddress))
+            if (!ModelState.IsValid)
             {
-                return View("Register",student);
+                return View("RegisterStudent", student);
+            }
+            Student email = _studentRL.CheckEmail(student.EmailAddress);
+                
+            if (email != null)
+            {
+                ModelState.AddModelError("EmailAddress", "Mail already exists");
+                return View("RegisterStudent", student);
             }
 
             return RedirectToAction("Dashboard");
         }
 
 
-        public IActionResult Register(StudentModel student)
+        public IActionResult RegisterStudent(StudentModel student)
         {
              return View(student);
         }
