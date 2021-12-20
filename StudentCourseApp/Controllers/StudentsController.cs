@@ -82,5 +82,35 @@ namespace StudentCourseApp.Controllers
         {
              return View(student);
         }
+
+        public IActionResult Edit(long id, Student student)
+        {
+            if(id != 0)
+            {
+                student = this._studentRL.GetStudent(id);
+            }
+            return View(student);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Student model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Edit",model);
+            }
+            Student email = _studentRL.GetStudent(model.Id);
+
+            bool result = _studentRL.updateStudent(student: email,newStudent: model);
+
+            if (result)
+            {
+                return RedirectToAction("Dashboard");
+            }
+            else
+            {
+                return View("Edit", model);
+            }
+        }
     }
 }

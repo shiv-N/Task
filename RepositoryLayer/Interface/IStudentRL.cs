@@ -9,10 +9,14 @@ namespace RepositoryLayer.Interface
 {
     public interface IStudentRL
     {
-        Task<StudentCourseList<StudentCourse>> GetStudents(string sortOrder, string searchString,int pageNumber,int pageSize);
+        Task<PaginatedList<StudentCourse>> GetStudents(string sortOrder, string searchString,int pageNumber,int pageSize);
 
         Student CheckEmail(string email);
 
         bool Register(Student model);
+
+        Student GetStudent(long id);
+
+        bool updateStudent(Student student, Student newStudent);
     }
 }

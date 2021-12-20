@@ -30,7 +30,19 @@ namespace RepositoryLayer.Services
             }
         }
 
-        public async Task<StudentCourseList<StudentCourse>> GetStudents(string sortOrder, string searchString,
+        public Student GetStudent(long id)
+        {
+            try
+            {
+                return this._context.Students.First(x => x.Id == id);
+            }
+            catch(Exception e)
+            {
+                throw;
+            }
+        }
+
+        public async Task<PaginatedList<StudentCourse>> GetStudents(string sortOrder, string searchString,
                                                             int pageNumber, int pageSize)
         {
             try
@@ -60,10 +72,8 @@ namespace RepositoryLayer.Services
                         break;
                 }
 
-                //PaginatedList<Student> list = await PaginatedList<Student>.CreateAsync(students.AsNoTracking(), pageNumber, pageSize);
 
-
-                List<StudentCourse> studentCourses = (from S in students
+                var studentCourses =  (from S in students
                                                       select new StudentCourse
                                                     {
                                                         StudentId = S.Id,
@@ -85,14 +95,12 @@ namespace RepositoryLayer.Services
                                                                        CreateAt = C.CreateAt,
                                                                        ModifiedAt = C.ModifiedAt
                                                                    }).ToList()
-                                                    }).ToList();
+                                                    });
 
-                StudentCourseList<StudentCourse> result = StudentCourseList<StudentCourse>.Create(
-                                                                            studentCourses,
-                                                                            pageNumber,
-                                                                            pageSize);
-
-                return result;
+                PaginatedList<StudentCourse> list = 
+                    await PaginatedList<StudentCourse>.CreateAsync(studentCourses.AsNoTracking(), pageNumber, pageSize);
+                
+                return list;
             }
             catch(Exception e)
             {
@@ -118,6 +126,32 @@ namespace RepositoryLayer.Services
                 }
             }
             catch(Exception e)
+            {
+                throw;
+            }
+        }
+
+        public bool updateStudent(Student student, Student newStudent)
+        {
+            try
+            {
+                student.FirstName = newStudent.FirstName;
+                student.LastName = newStudent.LastName;
+                student.EmailAddress = newStudent.EmailAddress;
+                student.EnrollDate = newStudent.EnrollDate;
+                student.ModifiedAt = DateTime.Now;
+                int result = this._context.SaveChanges();
+
+                if(result > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch(Exception ex)
             {
                 throw;
             }

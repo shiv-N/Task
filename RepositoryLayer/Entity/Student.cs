@@ -13,9 +13,17 @@ namespace RepositoryLayer.Entity
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
+
+        [Required]
         public string FirstName { get; set; }
+
+        [Required]
         public string LastName { get; set; }
+
+        [Required]
         public DateTime EnrollDate { get; set; }
+
+        [Required]
         public string EmailAddress { get; set; }
         public DateTime? CreatedAt  { get; set; }
         public DateTime? ModifiedAt  { get; set; }
