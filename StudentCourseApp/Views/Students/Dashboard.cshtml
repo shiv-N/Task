@@ -1,4 +1,4 @@
-﻿@model RepositoryLayer.PaginatedList<RepositoryLayer.Entity.Student>
+﻿@model RepositoryLayer.Entity.StudentCourseList<RepositoryLayer.Entity.StudentCourse>
 
 @{
     ViewData["Title"] = "Dashboard";
@@ -39,6 +39,9 @@
             <th>
                 Email
             </th>
+            <th>
+                Courses
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -59,15 +62,29 @@
                     @Html.DisplayFor(modelItem => item.EmailAddress)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    @if (item.Courses.Count != 0)
+                    {
+                        @foreach (var Course in item.Courses)
+                        {
+                            <span class="badge badge-dark">@Course.CourseName</span>
+                        }
+                    }
+                    else { 
+                        <span class="badge badge-danger">NA</span>
+                    }
+
+
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.StudentId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.StudentId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.StudentId">Delete</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
-@{
+@*@{
     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 }
@@ -87,4 +104,4 @@
    asp-route-currentFilter="@ViewData["CurrentFilter"]"
    class="btn btn-default @nextDisabled">
     Next
-</a>
+</a>*@

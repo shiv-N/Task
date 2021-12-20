@@ -9,7 +9,7 @@ namespace RepositoryLayer.Interface
 {
     public interface IStudentRL
     {
-        Task<PaginatedList<Student>> GetStudents(string sortOrder, string searchString,int pageNumber,int pageSize);
+        Task<StudentCourseList<StudentCourse>> GetStudents(string sortOrder, string searchString,int pageNumber,int pageSize);
 
         Student CheckEmail(string email);
 

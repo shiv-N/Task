@@ -30,7 +30,7 @@ namespace RepositoryLayer.Services
             }
         }
 
-        public async Task<PaginatedList<Student>> GetStudents(string sortOrder, string searchString,
+        public async Task<StudentCourseList<StudentCourse>> GetStudents(string sortOrder, string searchString,
                                                             int pageNumber, int pageSize)
         {
             try
@@ -60,8 +60,39 @@ namespace RepositoryLayer.Services
                         break;
                 }
 
+                PaginatedList<Student> list = await PaginatedList<Student>.CreateAsync(students.AsNoTracking(), pageNumber, pageSize);
 
-                return await PaginatedList<Student>.CreateAsync(students.AsNoTracking(),pageNumber,pageSize);
+
+                List<StudentCourse> studentCourses = (from S in list
+                                                select new StudentCourse
+                                                {
+                                                    StudentId = S.Id,
+                                                    FirstName = S.FirstName,
+                                                    LastName = S.LastName,
+                                                    EnrollDate = S.EnrollDate,
+                                                    EmailAddress = S.EmailAddress,
+                                                    CreatedAt = S.CreatedAt,
+                                                    ModifiedAt = S.ModifiedAt,
+                                                    Courses = (from SC in _context.StudentCourseCollab
+                                                               join C in _context.Courses
+                                                               on SC.Id equals S.Id
+                                                               where SC.CourseId == C.CourseId
+                                                               select new Course
+                                                               {
+                                                                   CourseName = C.CourseName,
+                                                                   CourseFee = C.CourseFee,
+                                                                   CourseId = C.CourseId,
+                                                                   CreateAt = C.CreateAt,
+                                                                   ModifiedAt = C.ModifiedAt
+                                                               }).ToList()
+                                                }).ToList();
+
+                StudentCourseList<StudentCourse> result = StudentCourseList<StudentCourse>.Create(
+                                                                            studentCourses,
+                                                                            pageNumber,
+                                                                            pageSize);
+
+                return result;
             }
             catch(Exception e)
             {
