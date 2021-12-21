@@ -18,5 +18,7 @@ namespace RepositoryLayer.Interface
         Student GetStudent(long id);
 
         bool updateStudent(Student student, Student newStudent);
+
+        bool DeleteStudent(Student model);
     }
 }

@@ -1,0 +1,42 @@
+Create a web application. it has two entities  
+	1) Student
+		ID
+		FirstName
+		LastName
+		EnrollDate
+		EmailAddress 
+		
+	2) Course
+		ID
+		CourseName
+		StudentID
+		CourseFee
+		
+
+Create below views
+	1) Student Listing:
+		- It will display all the students list in tabular format with edit and delete link.
+		- It will display maximum 10 students per page. (Pagination)
+		- There will be filtering textbox which will checks on name and email field.
+
+	2) Create Student
+		Note:
+			- All the fields are required.
+			- Duplicate students will not allowed.
+		
+	3) Edit Student
+		- It will displays the student details as well as courses of that student in tabular format with edit and delete course link.
+		- User will update the student detail.
+		- It will displays maximum 4 courses of that student per page. (Pagination)
+		- User should be able to add new course from here.
+		- New course will be added from popup. (While adding course the table of courses will be updated using ajax).
+		- Also the update course will be done from popup and the table is updated using ajax.
+		
+	Note:
+		- Use MVC and Entity Framework Code First Approch/Database First Approch. Or Use other DB methods with separate DataAccess Class library.
+		- Deletion of any record will prompt for the confirmation. (Like, "Are you sure you want to delete ?")
+		- Necessary validation will be required.
+		- We will consider your code quality.
+		- Time will be also considered(4 hours).
+		
+

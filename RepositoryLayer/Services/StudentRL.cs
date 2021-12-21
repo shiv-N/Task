@@ -30,6 +30,33 @@ namespace RepositoryLayer.Services
             }
         }
 
+        public bool DeleteStudent(Student model)
+        {
+            try
+            {
+                List<StudentCourseCollab> studentCourses = (from SC in _context.StudentCourseCollab
+                                                            where SC.Id == model.Id
+                                                            select SC).ToList();
+                                                            
+                _context.StudentCourseCollab.RemoveRange(studentCourses);
+                _context.Students.Remove(model);
+                int result = _context.SaveChanges();
+
+                if (result > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch(Exception e)
+            {
+                throw;
+            }
+        }
+
         public Student GetStudent(long id)
         {
             try

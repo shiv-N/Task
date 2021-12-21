@@ -112,5 +112,19 @@ namespace StudentCourseApp.Controllers
                 return View("Edit", model);
             }
         }
+
+        public IActionResult Delete(long id)
+        {
+            Student student = _studentRL.GetStudent(id);
+
+            if (student == null)
+            {
+                return NotFound("The Employee record couldn't be found.");
+            }
+
+            _studentRL.DeleteStudent(student);
+            
+            return RedirectToAction("Dashboard");
+        }
     }
 }
